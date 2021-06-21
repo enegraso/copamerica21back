@@ -21,6 +21,7 @@
     "git-url-parse": "^11.4.4",
     "https": "^1.0.0",
     "jest": "^27.0.1",
+    "morgan": "^1.10.0",
     "node-adodb": "^5.0.3",
     "simple-git": "^2.39.0"
   },

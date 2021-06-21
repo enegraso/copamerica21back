@@ -20,6 +20,22 @@ router.get("/users", (req, res) => {
     });
 });
 
+// get user when login
+router.get("/user", (req, res) => {
+  const {name, pass} = req.query
+  var result = tables.getUser(name, pass);
+  result
+    .then((data) => {
+      res.status(200);
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(400);
+      res.send(error);
+    });
+});
+
+// register user
 router.post("/users", (req, res) => {
   const { name, pass } = req.body;
   var result = tables.addUser(name, pass);

@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const { text } = require("express");
 const ADODB = require("node-adodb");
@@ -8,6 +8,7 @@ const connection = ADODB.open(
 
 let anda;
 let datos = {};
+var usuario = {};
 var usuarios = {};
 var agregada = false;
 var borrado = false
@@ -16,7 +17,7 @@ var borrado = false
 module.exports = {
   listUsers: async function () {
     try {
-      const users = await connection.query("SELECT * FROM Users");
+      const users = await connection.query("SELECT * FROM Users order by score Desc");
       usuarios = users;
       // console.log(JSON.stringify(users, null, 2));
     } catch (error) {
@@ -25,14 +26,21 @@ module.exports = {
     // console.log(usuarios)
     return usuarios;
   },
+  getUser: async function (name, pass) {
+    try {
+      let textinfo = "SELECT * FROM Users where usuario='" + name + "' and clave='" + pass + "'"
+      const user = await connection.query(textinfo);
+      usuario = user;
 
+    } catch (error) {
+      console.error(error);
+    }
+
+    return usuario;
+  },
   addUser: async function (user, pass) {
     let textinto =
-      'INSERT INTO Users (usuario, clave) VALUES ("' +
-      user +
-      '","' +
-      pass +
-      '")';
+      "INSERT INTO Users (usuario, clave, score) VALUES ('" + user + "','" + pass + "',5)";
     console.log(user, pass, textinto);
     var repetido = usuarios.find(u => u.usuario === user)
     console.log(repetido)

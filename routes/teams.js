@@ -75,8 +75,8 @@ router.get("/matches", (req, res) => {
       res.send({"error":"Debe ingresar el partido a pronosticar"})
     }
     if (lresult > vresult) mresult = "L"
-    else if (lresult = vresult) mresult = "E"
-    else mresult = V
+    else if (lresult < vresult) mresult = "V"
+    else mresult = "E"
     var result = teams.addProde(userid, matchid, lresult, vresult, mresult);
     result
       .then((data) => {
@@ -98,9 +98,37 @@ router.get("/matches", (req, res) => {
       res.send({"error":"Debe ingresar el partido"})
     }
     if (lresult > vresult) mresult = "L"
-    else if (lresult = vresult) mresult = "E"
-    else mresult = V
+    else if (lresult === vresult) mresult = "E"
+    else mresult = "V"
     var result = teams.addResult(matchid, lresult, vresult, mresult);
+    result
+      .then((data) => {
+        res.status(200);
+        res.json(data);
+      })
+      .catch((error) => {
+        res.status(400);
+        res.send(error);
+      });
+  });
+
+  router.get("/prodes", (req, res) => {
+    const {iduser, idmatch} = req.query
+    var result = teams.listProde(iduser,idmatch);
+    result
+      .then((data) => {
+        res.status(200);
+        res.json(data);
+      })
+      .catch((error) => {
+        res.status(400);
+        res.send(error);
+      });
+  });
+
+  router.get("/pronos", (req, res) => {
+	const iduser = req.query.iduser
+    var result = teams.listPronos(iduser);
     result
       .then((data) => {
         res.status(200);
